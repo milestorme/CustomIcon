@@ -59,15 +59,35 @@ namespace Oxide.Plugins
 
         private void TryApplySteamAvatarUserID(string command, object[] args)
         {
-            if (args == null || _configuration == null) 
-                return;
-            
-            if (args.Length < 2 || (command != "chat.add" && command != "chat.add2")) 
+            if (args == null || _configuration == null || _configuration.SteamAvatarUserID == 0)
                 return;
 
-            ulong providedID;
-            if (ulong.TryParse(args[1].ToString(), out providedID) && providedID == 0)
-                args[1] = _configuration.SteamAvatarUserID;
+            switch (command)
+            {
+                case "chat.add":
+                {
+                    if (args.Length <= 1 || args[1] == null)
+                        return;
+
+                    ulong providedID;
+                    if (ulong.TryParse(args[1].ToString(), out providedID) && providedID == 0)
+                        args[1] = _configuration.SteamAvatarUserID;
+
+                    return;
+                }
+
+                case "chat.add2":
+                {
+                    if (args.Length <= 0 || args[0] == null)
+                        return;
+
+                    ulong providedID;
+                    if (ulong.TryParse(args[0].ToString(), out providedID) && providedID == 0)
+                        args[0] = _configuration.SteamAvatarUserID;
+
+                    return;
+                }
+            }
         }
 
         #endregion
